@@ -1,0 +1,30 @@
+---
+title: "Advent of Code"
+subtitle: "December 2023"
+---
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| eval: true 
+#| file: scripts/2023/day01-prompt.R
+```
+
+::: {.callout-note collapse="true"}
+## `r prompt_title` (Prompt)
+
+`r prompt_text`
+:::
+
+::: {.callout-note collapse="true"}
+## `r prompt_title` (Proposed Solution)
+
+```{r}
+#| echo: true
+#| warning: false
+#| message: false
+#| eval: true 
+#| file: scripts/2023/day01-solution.R
+```
+:::
