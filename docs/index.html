@@ -328,6 +328,136 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+— Day 2: Cube Conundrum — (Prompt)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>— Day 2: Cube Conundrum —</p>
+<p>You’re launched high into the atmosphere! The apex of your trajectory just barely reaches the surface of a large island floating in the sky. You gently land in a fluffy pile of leaves. It’s quite cold, but you don’t see much snow. An Elf runs over to greet you.</p>
+<p>The Elf explains that you’ve arrived at Snow Island and apologizes for the lack of snow. He’ll be happy to explain the situation, but it’s a bit of a walk, so you have some time. They don’t get many visitors up here; would you like to play a game in the meantime?</p>
+<p>As you walk, the Elf shows you a small bag and some cubes which are either red, green, or blue. Each time you play this game, he will hide a secret number of cubes of each color in the bag, and your goal is to figure out information about the number of cubes.</p>
+<p>To get information, once a bag has been loaded with cubes, the Elf will reach into the bag, grab a handful of random cubes, show them to you, and then put them back in the bag. He’ll do this a few times per game.</p>
+<p>You play several games and record the information from each game (your puzzle input). Each game is listed with its ID number (like the 11 in Game 11: …) followed by a semicolon-separated list of subsets of cubes that were revealed from the bag (like 3 red, 5 green, 4 blue).</p>
+<p>For example, the record of a few games might look like this:</p>
+<p>Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green</p>
+<p>In game 1, three sets of cubes are revealed from the bag (and then put back again). The first set is 3 blue cubes and 4 red cubes; the second set is 1 red cube, 2 green cubes, and 6 blue cubes; the third set is only 2 green cubes.</p>
+<p>The Elf would first like to know which games would have been possible if the bag contained only 12 red cubes, 13 green cubes, and 14 blue cubes?</p>
+<p>In the example above, games 1, 2, and 5 would have been possible if the bag had been loaded with that configuration. However, game 3 would have been impossible because at one point the Elf showed you 20 red cubes at once; similarly, game 4 would also have been impossible because the Elf showed you 15 blue cubes at once. If you add up the IDs of the games that would have been possible, you get 8.</p>
+<p>Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+— Day 2: Cube Conundrum — (Proposed Solution)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-file="scripts/2023/day02-solution.R">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Advent of Code - Day 2-------------------------------------------------------</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Library Load-in--------------------------------------------------------------</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Load-in-----------------------------------------------------------------</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>df_input <span class="ot">&lt;-</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">here</span>(</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">"scripts"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">"2023"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">"inputs"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">"input-02.csv"</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_col_types =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 1 Solution--------------------------------------------------------------</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>df_input <span class="sc">|&gt;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pull out the max numbers for each color in each game</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">game_id =</span> <span class="fu">str_extract</span>(input, <span class="st">"Game </span><span class="sc">\\</span><span class="st">d+"</span>),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">game_id =</span> <span class="fu">str_replace_all</span>(game_id, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">red_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ red"</span>),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">red_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(red_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>))),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">blue_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ blue"</span>),</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">blue_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(blue_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>))),</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">green_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ green"</span>),</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">green_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(green_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>)))</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">separate_longer_delim</span>(input, <span class="st">";"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(game_id, <span class="fu">ends_with</span>(<span class="st">"_max"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">as.numeric</span>(.))) <span class="sc">|&gt;</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter for the max number of colors asked for</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(red_max <span class="sc">&lt;=</span> <span class="dv">12</span> <span class="sc">&amp;</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>         blue_max <span class="sc">&lt;=</span> <span class="dv">14</span> <span class="sc">&amp;</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>         green_max <span class="sc">&lt;=</span> <span class="dv">13</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pull the unique rows as the manip caused dupes</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add it up</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">game_id =</span> <span class="fu">sum</span>(game_id)) <span class="sc">|&gt;</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Spit it out</span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2278</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Part 2 Solution--------------------------------------------------------------</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#=============================================================================#</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>df_input <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Same as above</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">game_id =</span> <span class="fu">str_extract</span>(input, <span class="st">"Game </span><span class="sc">\\</span><span class="st">d+"</span>),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">game_id =</span> <span class="fu">str_replace_all</span>(game_id, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">red_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ red"</span>),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">red_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(red_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>))),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">blue_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ blue"</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">blue_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(blue_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>))),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">green_ns =</span> <span class="fu">str_extract_all</span>(input, <span class="st">" </span><span class="sc">\\</span><span class="st">d+ green"</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">green_max =</span> <span class="fu">max</span>(<span class="fu">as.numeric</span>(<span class="fu">str_replace_all</span>(green_ns, <span class="st">"[:alpha:]"</span>, <span class="st">""</span>)))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_longer_delim</span>(input, <span class="st">";"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(game_id, <span class="fu">ends_with</span>(<span class="st">"_max"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">as.numeric</span>(.))) <span class="sc">|&gt;</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pull the uniques as manip caused dupes</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calc the powers</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cubed_total =</span> red_max <span class="sc">*</span> blue_max <span class="sc">*</span> green_max) <span class="sc">|&gt;</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add it up</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">cubed_total =</span> <span class="fu">sum</span>(cubed_total)) <span class="sc">|&gt;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Spit it out</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 67953</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 
 
